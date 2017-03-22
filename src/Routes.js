@@ -4,8 +4,8 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './components/Home'
 import About from './components/About'
 import Details from './components/Details'
-import Contact from './components/Contact'
 
+import Compare from './components/render/Compare'
 import NotFound from './components/render/NotFound'
 import Nav from './components/render/Nav'
 
@@ -19,7 +19,7 @@ class Routes extends React.Component {
             <Route path='/' exact component={Home} />
             <Route path='/about' exact component={About} />
             <Route path='/details' exact component={Details} />
-            <Route path='/contact' exact component={Contact} />
+            <Route path='/compare' component={Compare} />
             <Route component={NotFound} />
           </Switch>
         </div>

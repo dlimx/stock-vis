@@ -34,7 +34,6 @@ class Nav extends React.Component {
           <NavLink exact to='/' activeClassName='active'>Home</NavLink>
           <NavLink to='/about' activeClassName='active'>About</NavLink>
           <NavLink to='/details' activeClassName='active'>Details</NavLink>
-          <NavLink to='/contact' activeClassName='active'>Contact</NavLink>
           <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
         </div>
 

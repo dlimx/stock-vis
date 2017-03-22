@@ -9,9 +9,15 @@ class Home extends React.Component {
   render () {
     return (
       <div>
-        <div>
-          <h1>React-Boilerplate</h1>
-          <h5>Let's build a brighter tomorrow - together.</h5>
+        <div id='title'>
+          <h1>Stock-Vis</h1>
+          <form>
+            <label>
+              <h4>Input your stock here:</h4>
+              <input style={{'maxWidth': '700px'}} type='text' name='name' />
+            </label>
+            <input type='submit' value='Submit' />
+          </form>
         </div>
       </div>
     )
