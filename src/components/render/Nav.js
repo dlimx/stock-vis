@@ -31,10 +31,9 @@ class Nav extends React.Component {
     return (
       <nav className={this.state.class}>
         <div className='responsive-menu'>
-          <NavLink exact to='/' activeClassName='clicked'><img src='/public/favicon.ico' /></NavLink>
+          <NavLink exact to='/' activeClassName='active'>Home</NavLink>
           <NavLink to='/about' activeClassName='active'>About</NavLink>
-          <NavLink to='/projects' activeClassName='active'>Projects</NavLink>
-          <NavLink to='/blog' activeClassName='active'>Stories</NavLink>
+          <NavLink to='/details' activeClassName='active'>Details</NavLink>
           <NavLink to='/contact' activeClassName='active'>Contact</NavLink>
           <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
         </div>

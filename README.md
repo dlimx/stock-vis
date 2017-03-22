@@ -9,17 +9,19 @@ cd react-boilerplate
 npm install
 ```
 
-### Run the app from a dev server
+### Run the dev sever
 ```sh
-npm serve
+npm run dev
 ```
 
-### Build the app
+Note: Standard and ESLint is used for linting. NPM-run-all and nodemon are used to host a dev environment.
+
+### Build
 ```sh
 npm run build
 ```
 
-### Host the app from a server (app must have been built)
+### Server start (requires build)
 ```sh
 npm run serve
 ```
