@@ -1,4 +1,4 @@
-# react-boilerplate\
+# react-boilerplate
 
 Uses Preact!
 
