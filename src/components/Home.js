@@ -1,6 +1,7 @@
 import React from 'react'
 
-import axios from 'axios'
+import LinkCard from './render/LinkCard'
+import data from '../../public/data.json'
 
 // main component for home
 class Home extends React.Component {
@@ -8,7 +9,8 @@ class Home extends React.Component {
     super(props)
     this.state = {
       searchTerm: '',
-      data: []
+      searchResults: [],
+      display: ''
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
@@ -20,18 +22,24 @@ class Home extends React.Component {
 
   search (e) {
     e.preventDefault()
-    axios.get(
-      `https://www.quandl.com/api/v3/datasets/WIKI/FB/data.csv?column_index=4&exclude_column_names=true&rows=3&start_date=2012-11-01&end_date=2013-11-30&order=asc&collapse=quarterly&transform=rdiff`
-    ).then((res) => {
-      this.setState({data: res})
-    })
   }
 
   handleSearch (e) {
     this.setState({ searchTerm: e.target.value })
+    let array = data.codes.filter((a) => { return (`${a.code} ${a.details}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) })
+    this.setState({ searchResults: array })
+    let display
+    if (this.state.searchResults.length < 5) {
+      display = this.state.searchResults.map((code, i) => (<LinkCard {...code} key={i} id={i} />))
+      this.setState({ display: display })
+    } else {
+      display = <p>There are too many search results!</p>
+      this.setState({display: display})
+    }
   }
 
   render () {
+    // fix this with server-side
     return (
       <div>
         <div id='title'>
@@ -42,11 +50,11 @@ class Home extends React.Component {
             </label>
             <input style={{'maxWidth': '700px'}} type='text' placeholder='i.e. GOOG, APPL' value={this.state.searchTerm} onChange={this.handleSearch} />
             <input type='submit' value='Submit' />
-
-            <div className='row'>
-              <pre><code>{JSON.stringify(this.state.data, 4)}</code></pre>
-            </div>
           </form>
+
+          <div className='row'>
+            {this.state.display}
+          </div>
         </div>
       </div>
     )

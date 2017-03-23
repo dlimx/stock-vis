@@ -11,7 +11,7 @@ class About extends React.Component {
       <div>
         <div className='row'>
           <div className='col-md-8 col-md-offset-2'>
-            <h2>About Me</h2>
+            <h2>About</h2>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 // component to render stock info
 class Stock extends React.Component {
@@ -7,18 +8,21 @@ class Stock extends React.Component {
   }
 
   render () {
-    var data
     return (
       <div>
         <div className='row'>
           <div className='col-md-8 col-md-offset-2'>
             <h2>Info</h2>
-            <pre><code>{JSON.stringify(data, 4)}</code></pre>
+            <pre><code>{this.props.match.params.id}</code></pre>
           </div>
         </div>
       </div>
     )
   }
+}
+
+Stock.propTypes = {
+  match: React.PropTypes.object.isRequired
 }
 
 export default Stock
