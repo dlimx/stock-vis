@@ -9,9 +9,10 @@ class Details extends React.Component {
   render () {
     return (
       <div>
-        <div>
-          <h2>Details</h2>
-          <p>Here are some of the best (or worst!) things I've created.</p>
+        <div className='row'>
+          <div className='col-md-8 col-md-offset-2'>
+            <h2>Info</h2>
+          </div>
         </div>
       </div>
     )
