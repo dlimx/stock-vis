@@ -20,13 +20,9 @@ class Home extends React.Component {
 
   search (e) {
     e.preventDefault()
-    axios.get('https://www.quandl.com/api/v3/datatables/WIKI/PRICES.json', {
-      params: {
-        ticker: this.state.searchTerm,
-        'qopts.columns': 'date,open',
-        api_key: 'PkKKxSJVBs2vP8_zkUb_'
-      }
-    }).then(function (res) {
+    axios.get(
+      `https://www.quandl.com/api/v3/datasets/WIKI/FB/data.csv?column_index=4&exclude_column_names=true&rows=3&start_date=2012-11-01&end_date=2013-11-30&order=asc&collapse=quarterly&transform=rdiff`
+    ).then((res) => {
       this.setState({data: res})
     })
   }
