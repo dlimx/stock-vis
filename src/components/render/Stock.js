@@ -1,11 +1,9 @@
 import React from 'react'
-import axios from 'axios'
 
 // component to render stock info
 class Stock extends React.Component {
   componentDidMount () {
     window.scrollTo(0, 0)
-    axios.get()
   }
 
   render () {
