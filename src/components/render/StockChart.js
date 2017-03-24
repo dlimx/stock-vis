@@ -16,31 +16,38 @@ const StockChart = React.createClass({
 
   componentDidMount () {
     const faux = this.connectFauxDOM('div.renderedD3', 'chart')
-    const data = this.props.data
+    const data = this.props.data.map((a) => { return [a[0], a[4]] })
 
-    let w = 1140
-    let h = 500
+    let m = {top: 20, right: 20, bottom: 20, left: 40}
+    let w = document.getElementsByClassName('container')[0].offsetWidth - 30
+    let h = (w / 2)
 
     let xScale = d3.scaleLinear()
       .domain([0, d3.max(data, (d, i) => { return i })])
-      .range([w, 0])
+      .range([w - m.right, m.left])
     let yScale = d3.scaleLinear()
-      .domain([0, d3.max(data, (d) => { return d[4] })])
-      .range([0, h])
+      .domain([0, d3.max(data, (d) => { return d[1] })])
+      .range([h - m.top, m.bottom])
+
+    let xAxis = d3.axisBottom(xScale)
+    let yAxis = d3.axisLeft(yScale)
 
     let svg = d3.select(faux).append('svg').attr('width', w).attr('height', h)
+
+    svg.append('g').call(xAxis).attr('transform', 'translate(0,' + (h - m.bottom) + ')')
+    svg.append('g').call(yAxis).attr('transform', 'translate(' + m.left + ',0)')
 
     svg.selectAll('rect')
       .data(data)
       .enter()
       .append('rect')
       .attr('height', (d) => {
-        return yScale(d[4])
+        return (yScale(0) - yScale(d[1]))
       })
       .attr('width', w / data.length)
       .attr('x', (d, i) => { return xScale(i) })
-      .attr('y', (d) => { return h - yScale(d[4]) })
-      .attr('fill', (d) => { return 'rgb(0,0,' + parseInt((d[4] - 60) * 4) + ')' })
+      .attr('y', (d) => { return yScale(d[1]) })
+      .attr('fill', (d) => { return '#CCC' })
   },
 
   render () {
