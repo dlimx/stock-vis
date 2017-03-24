@@ -29,7 +29,7 @@ class Home extends React.Component {
   }
 
   handleSearch (e) {
-    this.setState({ searchTerm: e.target.value })
+    this.setState({ searchTerm: e.target.value, searchMatch: false })
     let array
     if (this.state.searchDetails) {
       array = data.codes.filter((a) => {
@@ -106,7 +106,7 @@ class Home extends React.Component {
     // fix this with server-side
     return (
       <div>
-        <div id='title'>
+        <div id='title' className='centered'>
           <h1>Stock-Vis</h1>
           <form onSubmit={this.search}>
             <label>

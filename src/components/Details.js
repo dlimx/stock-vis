@@ -9,7 +9,7 @@ class Details extends React.Component {
   render () {
     return (
       <div>
-        <div className='row'>
+        <div className='row centered'>
           <div className='col-md-8 col-md-offset-2'>
             <h2>Info</h2>
           </div>

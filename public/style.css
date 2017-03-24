@@ -16,17 +16,38 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   top: 25%;
   left: 50%;
   transform: translate(-50%);
-  text-align: center;
-}
-
-h1{
-	text-align: center;
 }
 
 #title > h1{
   font-size: 6rem;
 }
 
-.row > div > h2{
+.centered{
 	text-align: center;
+}
+
+text{
+  fill: #606c76;
+  font-family: 'Roboto', sans-serif
+}
+
+.tick > line{
+  stroke: #606c76;
+}
+
+@media(max-width: 767px){
+  footer{
+    position: fixed;
+    top: 15px;
+    left: 10px;
+    z-index: 10000;
+  }
+}
+
+@media (min-width: 768px){
+  footer{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+  }
 }

@@ -29,15 +29,18 @@ class Nav extends React.Component {
   // component itself - CSS based responsive design
   render () {
     return (
-      <nav className={this.state.class}>
-        <div className='responsive-menu'>
-          <NavLink exact to='/' activeClassName='active'>Home</NavLink>
-          <NavLink to='/about' activeClassName='active'>About</NavLink>
-          <NavLink to='/details' activeClassName='active'>Details</NavLink>
-          <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
-        </div>
+      <div>
+        <nav className={this.state.class}>
+          <div className='responsive-menu'>
+            <NavLink exact to='/' activeClassName='active'>Home</NavLink>
+            <NavLink to='/about' activeClassName='active'>About</NavLink>
+            <NavLink to='/details' activeClassName='active'>Details</NavLink>
+            <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
+          </div>
 
-      </nav>
+        </nav>
+        <footer><a href='https://www.davidli.io/'>Made by David Li, 2017</a></footer>
+      </div>
     )
   }
 }
