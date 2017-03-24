@@ -33,7 +33,7 @@ class Stock extends React.Component {
       <div>
         <div className='row'>
           <div className='col-md-8 col-md-offset-2'>
-            <h2>{this.props.match.params.id.toUpperCase()}</h2>
+            <h1>{this.props.match.params.id.toUpperCase()}</h1>
           </div>
         </div>
         <div className='row'>
