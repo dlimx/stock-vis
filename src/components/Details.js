@@ -12,7 +12,6 @@ class Details extends React.Component {
         <div className='row'>
           <div className='col-md-8 col-md-offset-2'>
             <h2>Info</h2>
-            <p>You haven't selected any stocks yet</p>
           </div>
         </div>
       </div>

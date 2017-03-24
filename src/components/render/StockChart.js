@@ -22,12 +22,14 @@ const StockChart = React.createClass({
     let w = document.getElementsByClassName('container')[0].offsetWidth - 30
     let h = (w / 2)
 
-    let xScale = d3.scaleLinear()
+    let xScale = d3.scaleTime()
       .domain([0, d3.max(data, (d, i) => { return i })])
-      .range([w - m.right, m.left])
+      .rangeRound([m.left, w - m.right])
     let yScale = d3.scaleLinear()
       .domain([0, d3.max(data, (d) => { return d[1] })])
       .range([h - m.top, m.bottom])
+
+    let parseTime = d3.timeParse('%y-%b-%d')
 
     let xAxis = d3.axisBottom(xScale)
     let yAxis = d3.axisLeft(yScale)
@@ -57,10 +59,6 @@ const StockChart = React.createClass({
         <div className='renderedD3'>
           {this.state.chart}
         </div>
-
-        <pre><code>
-          {JSON.stringify(this.props.data, null, 4)}
-        </code></pre>
       </div>
     )
   }

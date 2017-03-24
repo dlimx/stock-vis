@@ -11,6 +11,7 @@ class Home extends React.Component {
       searchTerm: '',
       searchResults: [],
       searchDetails: false,
+      searchMatch: false,
       display: ''
     }
     this.handleSearch = this.handleSearch.bind(this)
@@ -31,16 +32,55 @@ class Home extends React.Component {
     this.setState({ searchTerm: e.target.value })
     let array
     if (this.state.searchDetails) {
-      array = data.codes.filter((a) => { return (`${a.code} ${a.details}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) })
+      array = data.codes.filter((a) => {
+        if (`${a.code} ${a.details}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) {
+          if (a.code.toUpperCase().slice(a.code.indexOf('/') + 1) === (this.state.searchTerm.toUpperCase())) {
+            this.setState({searchMatch: a})
+          }
+          return true
+        }
+      })
     } else {
-      array = data.codes.filter((a) => { return (`${a.code}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) })
+      array = data.codes.filter((a) => {
+        if (`${a.code}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) {
+          if (a.code.toUpperCase().slice(a.code.indexOf('/') + 1) === (this.state.searchTerm.toUpperCase())) {
+            this.setState({searchMatch: a})
+          }
+          return true
+        }
+      })
     }
+
     this.setState({ searchResults: array })
     let display
-    if (this.state.searchResults.length === 0) {
+    if (this.state.searchTerm.length === 0) {
+      display = <p>Please enter a search term!</p>
+    } else if (this.state.searchResults.length === 0) {
       display = <p>There are no results! <a onClick={this.handleDetails2} href=''>Perhaps try searching the descriptions too?</a></p>
     } else if (this.state.searchResults.length < 25) {
-      display = this.state.searchResults.map((code, i) => (<LinkCard {...code} key={i} id={i} />))
+      if (this.state.searchMatch) {
+        display = <div>
+          <LinkCard {...this.state.searchMatch} />
+          <hr />
+          {this.state.searchResults
+            .filter((a) => {
+              if (a.code === this.state.searchMatch.code) {
+                return false
+              } else {
+                return true
+              }
+            })
+            .map((code, i) => (<LinkCard {...code} key={i} id={i} />))}
+        </div>
+      } else {
+        display = this.state.searchResults.map((code, i) => (<LinkCard {...code} key={i} id={i} />))
+      }
+    } else if (this.state.searchMatch) {
+      display = <div>
+        <LinkCard {...this.state.searchMatch} />
+        <hr />
+        <p>There are too many other search results!</p>
+      </div>
     } else {
       display = <p>There are too many search results!</p>
     }
