@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import LinkCard from './render/LinkCard'
 import data from '../../public/data.json'
@@ -125,6 +126,10 @@ class Home extends React.Component {
       </div>
     )
   }
+}
+
+Home.propTypes = {
+  searchTerm: React.PropTypes.string.isRequired
 }
 
 export default Home
