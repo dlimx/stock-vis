@@ -86,7 +86,7 @@ const StockChart = React.createClass({
   render () {
     return (
       <div>
-        <h2>Here is some fancy data:</h2>
+        <h2>Closing Prices:</h2>
         <div className='renderedD3'>
           {this.state.chart}
         </div>

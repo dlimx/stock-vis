@@ -1,19 +1,19 @@
-import { SET_SEARCH_TERM } from './actions'
+import { SET_CODE } from './actions'
 
 const DEFAULT_STATE = {
   searchTerm: ''
 }
 
-const setSearchTerm = (state, action) => {
+const setCode = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, {searchTerm: action.searchTerm})
+  Object.assign(newState, state, {code: action.code})
   return newState
 }
 
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
-    case SET_SEARCH_TERM:
-      return setSearchTerm(state, action)
+    case SET_CODE:
+      return setCode(state, action)
     default:
       return state
   }

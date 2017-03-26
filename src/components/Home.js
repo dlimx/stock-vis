@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import LinkCard from './render/LinkCard'
 
-import { setSearchTerm } from '../redux/actionCreators'
+import { setCode } from '../redux/actionCreators'
 
 import data from '../../public/data.json'
 
@@ -15,8 +15,7 @@ class Home extends React.Component {
       searchTerm: '',
       searchResults: [],
       searchMatch: false,
-      display: '',
-      error: ''
+      display: ''
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
@@ -24,6 +23,10 @@ class Home extends React.Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.handleSearch({target: {value: this.props.code}})
+    if (this.props.error) {
+      this.setState({error: 'Please enter a valid code.'})
+    }
   }
 
   search (e) {
@@ -37,10 +40,16 @@ class Home extends React.Component {
   }
 
   handleSearch (e) {
-    this.props.dispatch(setSearchTerm(e.target.value))
+    this.props.dispatch(setCode(e.target.value))
 
     this.setState({ searchTerm: e.target.value, searchMatch: false, error: '' })
-    let array
+    let array, display
+
+    if (!this.state.searchTerm) {
+      display = <p>Please enter a search term!</p>
+      return
+    }
+
     array = data.codes.filter((a) => {
       if (`${a.code}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) {
         if (a.code.toUpperCase().slice(a.code.indexOf('/') + 1) === (this.state.searchTerm.toUpperCase())) {
@@ -51,10 +60,8 @@ class Home extends React.Component {
     })
 
     this.setState({ searchResults: array })
-    let display
-    if (this.state.searchTerm.length === 0) {
-      display = <p>Please enter a search term!</p>
-    } else if (this.state.searchResults.length === 0) {
+
+    if (this.state.searchResults.length === 0) {
       display = <p>There are no results!</p>
     } else if (this.state.searchResults.length < 25) {
       if (this.state.searchMatch) {
@@ -95,7 +102,7 @@ class Home extends React.Component {
             <label>
               <h4>Search for a stock:</h4>
             </label>
-            <input style={{'maxWidth': '700px'}} type='text' placeholder='i.e. GOOG, APPL' value={this.props.searchTerm} onChange={this.handleSearch} />
+            <input ref={input => input && input.focus()} style={{'maxWidth': '700px'}} type='text' placeholder='i.e. GOOG, APPL' value={this.props.code} onChange={this.handleSearch} />
             <br />
             <input type='submit' value='Submit' />
             <br />
@@ -113,13 +120,14 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    searchTerm: state.searchTerm
+    code: state.code
   }
 }
 
 Home.propTypes = {
-  searchTerm: React.PropTypes.string,
-  dispatch: React.PropTypes.func
+  code: React.PropTypes.string,
+  dispatch: React.PropTypes.func,
+  error: React.PropTypes.string
 }
 
 Home.contextTypes = {
