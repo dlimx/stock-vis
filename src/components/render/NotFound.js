@@ -7,12 +7,12 @@ class NotFound extends React.Component {
     return (
       <div>
         <div className='card'>
-          <h3>404 page not found</h3>
+          <h3>404 Page Not Found</h3>
           <p>I'm sorry, but you got an error. Maybe I messed up a link. Or maybe you typed something wrong.</p>
           <p>Let's try again, shall we?</p>
         </div>
 
-        <Link className='card' to='/'>Return Home</Link>
+        <Link className='button' to='/'>Return Home</Link>
       </div>
     )
   }

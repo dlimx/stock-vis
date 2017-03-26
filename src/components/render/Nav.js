@@ -1,6 +1,7 @@
 import React from 'react'
 import onClickOutside from 'react-onclickoutside'
 import { NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 // main component for navigation
 class Nav extends React.Component {
@@ -28,13 +29,17 @@ class Nav extends React.Component {
 
   // component itself - CSS based responsive design
   render () {
+    let details
+    if (this.props.code) {
+      details = <NavLink to={`/details/${this.props.code}`} activeClassName='active'>Details</NavLink>
+    }
     return (
       <div>
         <nav className={this.state.class}>
           <div className='responsive-menu'>
             <NavLink exact to='/' activeClassName='active'>Home</NavLink>
             <NavLink to='/about' activeClassName='active'>About</NavLink>
-            <NavLink to='/details' activeClassName='active'>Details</NavLink>
+            {details}
             <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
           </div>
 
@@ -45,4 +50,14 @@ class Nav extends React.Component {
   }
 }
 
-export default onClickOutside(Nav)
+Nav.propTypes = {
+  code: React.PropTypes.string
+}
+
+const mapStateToProps = (state) => {
+  return {
+    code: state.code
+  }
+}
+
+export default connect(mapStateToProps)(onClickOutside(Nav))
