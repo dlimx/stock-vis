@@ -2,6 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import LinkCard from './render/LinkCard'
+
+import { setSearchTerm } from '../redux/actionCreators'
+
 import data from '../../public/data.json'
 
 // main component for home
@@ -11,13 +14,11 @@ class Home extends React.Component {
     this.state = {
       searchTerm: '',
       searchResults: [],
-      searchDetails: false,
       searchMatch: false,
-      display: ''
+      display: '',
+      error: ''
     }
     this.handleSearch = this.handleSearch.bind(this)
-    this.handleDetails = this.handleDetails.bind(this)
-    this.handleDetails2 = this.handleDetails2.bind(this)
     this.search = this.search.bind(this)
   }
 
@@ -27,37 +28,34 @@ class Home extends React.Component {
 
   search (e) {
     e.preventDefault()
+    console.log(this.context.router)
+    if (this.state.searchMatch) {
+      this.context.router.history.push(`/details/${this.state.searchTerm}`)
+    } else {
+      this.setState({error: 'Please enter a valid code.'})
+    }
   }
 
   handleSearch (e) {
-    this.setState({ searchTerm: e.target.value, searchMatch: false })
+    this.props.dispatch(setSearchTerm(e.target.value))
+
+    this.setState({ searchTerm: e.target.value, searchMatch: false, error: '' })
     let array
-    if (this.state.searchDetails) {
-      array = data.codes.filter((a) => {
-        if (`${a.code} ${a.details}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) {
-          if (a.code.toUpperCase().slice(a.code.indexOf('/') + 1) === (this.state.searchTerm.toUpperCase())) {
-            this.setState({searchMatch: a})
-          }
-          return true
+    array = data.codes.filter((a) => {
+      if (`${a.code}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) {
+        if (a.code.toUpperCase().slice(a.code.indexOf('/') + 1) === (this.state.searchTerm.toUpperCase())) {
+          this.setState({searchMatch: a})
         }
-      })
-    } else {
-      array = data.codes.filter((a) => {
-        if (`${a.code}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0) {
-          if (a.code.toUpperCase().slice(a.code.indexOf('/') + 1) === (this.state.searchTerm.toUpperCase())) {
-            this.setState({searchMatch: a})
-          }
-          return true
-        }
-      })
-    }
+        return true
+      }
+    })
 
     this.setState({ searchResults: array })
     let display
     if (this.state.searchTerm.length === 0) {
       display = <p>Please enter a search term!</p>
     } else if (this.state.searchResults.length === 0) {
-      display = <p>There are no results! <a onClick={this.handleDetails2} href=''>Perhaps try searching the descriptions too?</a></p>
+      display = <p>There are no results!</p>
     } else if (this.state.searchResults.length < 25) {
       if (this.state.searchMatch) {
         display = <div>
@@ -88,23 +86,7 @@ class Home extends React.Component {
     this.setState({display: display})
   }
 
-  handleDetails (e) {
-    if (!this.state.searchDetails) {
-      this.setState({ searchDetails: true })
-    } else {
-      this.setState({ searchDetails: false })
-    }
-    this.handleSearch({target: {value: this.state.searchTerm}})
-  }
-
-  handleDetails2 (e) {
-    e.preventDefault()
-    document.getElementById('details').checked = !document.getElementById('details').checked
-    this.handleDetails(e)
-  }
-
   render () {
-    // fix this with server-side
     return (
       <div>
         <div id='title' className='centered'>
@@ -113,10 +95,11 @@ class Home extends React.Component {
             <label>
               <h4>Search for a stock:</h4>
             </label>
-            <input style={{'maxWidth': '700px'}} type='text' placeholder='i.e. GOOG, APPL' value={this.state.searchTerm} onChange={this.handleSearch} />
+            <input style={{'maxWidth': '700px'}} type='text' placeholder='i.e. GOOG, APPL' value={this.props.searchTerm} onChange={this.handleSearch} />
             <br />
-
-            <span>Search Descriptions: <input type='checkbox' value={this.state.searchDetails} id='details' onChange={this.handleDetails} /></span>
+            <input type='submit' value='Submit' />
+            <br />
+            {this.state.error}
           </form>
 
           <div className='row'>
@@ -128,8 +111,19 @@ class Home extends React.Component {
   }
 }
 
-Home.propTypes = {
-  searchTerm: React.PropTypes.string.isRequired
+const mapStateToProps = (state) => {
+  return {
+    searchTerm: state.searchTerm
+  }
 }
 
-export default Home
+Home.propTypes = {
+  searchTerm: React.PropTypes.string,
+  dispatch: React.PropTypes.func
+}
+
+Home.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
+
+export default connect(mapStateToProps)(Home)

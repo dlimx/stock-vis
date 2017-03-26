@@ -1,5 +1,8 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+
+import store from './redux/store'
 
 import Home from './components/Home'
 import About from './components/About'
@@ -13,19 +16,21 @@ import Nav from './components/render/Nav'
 class Routes extends React.Component {
   render () {
     return (
-      <div>
-        <Route path='/' component={Nav} />
-        <div className='container'>
-          <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/about' exact component={About} />
-            <Route path='/details' exact component={Details} />
-            <Route path='/details/:id' component={Stock} />
-            <Route path='/compare' component={Compare} />
-            <Route component={NotFound} />
-          </Switch>
+      <Provider store={store}>
+        <div>
+          <Route path='/' component={Nav} />
+          <div className='container'>
+            <Switch>
+              <Route path='/' exact component={Home} />
+              <Route path='/about' exact component={About} />
+              <Route path='/details' exact component={Details} />
+              <Route path='/details/:id' component={Stock} />
+              <Route path='/compare' component={Compare} />
+              <Route component={NotFound} />
+            </Switch>
+          </div>
         </div>
-      </div>
+      </Provider>
     )
   }
 }
