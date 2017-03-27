@@ -15,7 +15,8 @@ class Home extends React.Component {
       searchTerm: '',
       searchResults: [],
       searchMatch: false,
-      display: ''
+      display: '',
+      error: ''
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
@@ -24,9 +25,6 @@ class Home extends React.Component {
   componentDidMount () {
     window.scrollTo(0, 0)
     this.handleSearch({target: {value: this.props.code}})
-    if (this.props.error) {
-      this.setState({error: 'Please enter a valid code.'})
-    }
   }
 
   search (e) {
@@ -125,8 +123,7 @@ const mapStateToProps = (state) => {
 
 Home.propTypes = {
   code: React.PropTypes.string,
-  dispatch: React.PropTypes.func,
-  error: React.PropTypes.string
+  dispatch: React.PropTypes.func
 }
 
 Home.contextTypes = {
