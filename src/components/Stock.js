@@ -14,16 +14,21 @@ class Stock extends React.Component {
     super(props)
     this.state = {
       data: '',
-      err: ''
+      err: '',
+      chart: '',
+      range: 261
     }
     this.props.dispatch(setCode(this.props.match.params.id.toUpperCase()))
+    this.update = this.update.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount () {
     window.scrollTo(0, 0)
-    axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${this.props.match.params.id}/data.json?api_key=PkKKxSJVBs2vP8_zkUb_&rows=1500`)
+    axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${this.props.match.params.id}/data.json?api_key=PkKKxSJVBs2vP8_zkUb_&rows=261`)
       .then((res) => {
         this.setState({data: res.data.dataset_data})
+        this.setState({chart: <StockChart {...res.data.dataset_data} key={this.state.range} />})
       })
       .catch((err) => {
         console.log(err)
@@ -31,17 +36,34 @@ class Stock extends React.Component {
       })
   }
 
+  update (days) {
+    axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${this.props.match.params.id}/data.json?api_key=PkKKxSJVBs2vP8_zkUb_&rows=${days}`)
+      .then((res) => {
+        this.setState({chart: <StockChart {...res.data.dataset_data} key={this.state.range} />})
+      })
+      .catch((err) => {
+        console.log(err)
+        this.setState({err: <span>The code {this.props.match.params.id.toUpperCase()} does not exist. <Link to='/'>Please try a new code.</Link></span>})
+      })
+  }
+
+  handleClick (e) {
+    const id = parseInt(e.target.id.slice(1))
+    this.setState({range: id})
+    this.update(id)
+  }
+
   render () {
-    let chart, info, msg, avg, diff, close, volume
     let data = this.state.data
+    let info, msg, avg, diff, close, volume
     if (this.state.err) {
       msg = this.state.err
     } else if (!data) {
       msg = 'Please wait, loading.'
     } else {
       msg = <span>Latest data are from yesterday, <DisplayDate date={data.data[0][0]} />.</span>
-      if (data.data.length >= 365) {
-        avg = Math.round(data.data.reduce((a, b) => { return a + b[5] }, 0) / 365)
+      if (data.data.length >= 261) {
+        avg = Math.round(data.data.reduce((a, b) => { return a + b[5] }, 0) / 261)
       } else {
         avg = 'Stock not old enough'
       }
@@ -60,7 +82,6 @@ class Stock extends React.Component {
         volume = <h5>Volume: {data.data[0][5]} <span style={{color: 'red', paddingLeft: '1rem'}}>{String.fromCharCode('9660')} {diff}%</span></h5>
       }
 
-      chart = <StockChart {...data} />
       info = (
         <div className='row'>
           <div className='col-sm-6'>
@@ -88,26 +109,28 @@ class Stock extends React.Component {
         {info}
         <div className='row'>
           <div className='col-xs-12'>
-            {chart}
+            <div>
+              {this.state.chart}
+            </div>
             <div className='row'>
-              <div className='buttons'>
+              <div className='buttons' id='nSelect'>
                 <div className='col-sm-2 col-xs-4'>
-                  <button className='button button-outline'>1 Week</button>
+                  <button className={'button ' + (this.state.range === 5 ? '' : 'button-outline')} onClick={this.handleClick} id='n5'>1 Week</button>
                 </div>
                 <div className='col-sm-2 col-xs-4'>
-                  <button className='button button-outline'>1 Month</button>
+                  <button className={'button ' + (this.state.range === 22 ? '' : 'button-outline')} onClick={this.handleClick} id='n22'>1 Month</button>
                 </div>
                 <div className='col-sm-2 col-xs-4'>
-                  <button className='button button-outline'>6 Months</button>
+                  <button className={'button ' + (this.state.range === 133 ? '' : 'button-outline')} onClick={this.handleClick} id='n133'>6 Months</button>
                 </div>
                 <div className='col-sm-2 col-xs-4'>
-                  <button className='button button-outline'>1 Year</button>
+                  <button className={'button ' + (this.state.range === 261 ? '' : 'button-outline')} onClick={this.handleClick} id='n261'>1 Year</button>
                 </div>
                 <div className='col-sm-2 col-xs-4'>
-                  <button className='button button-outline'>3 Years</button>
+                  <button className={'button ' + (this.state.range === 783 ? '' : 'button-outline')} onClick={this.handleClick} id='n783'>3 Years</button>
                 </div>
                 <div className='col-sm-2 col-xs-4'>
-                  <button className='button button-outline'>Maximum</button>
+                  <button className={'button ' + (this.state.range === 9999 ? '' : 'button-outline')} onClick={this.handleClick} id='n9999'>Maximum</button>
                 </div>
               </div>
             </div>

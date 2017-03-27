@@ -3,11 +3,10 @@ import Faux from 'react-faux-dom'
 
 const d3 = Object.assign({}, require('d3-scale'), require('d3-selection'), require('d3-time-format'), require('d3-axis'), require('d3-path'), require('d3-shape'), require('d3-array'))
 
-const {array} = React.PropTypes
-
 const StockChart = React.createClass({
   propTypes: {
-    data: array.isRequired
+    data: React.PropTypes.array.isRequired,
+    key: React.PropTypes.number.isRequired
   },
 
   mixins: [
@@ -16,7 +15,12 @@ const StockChart = React.createClass({
 
   componentDidMount () {
     const faux = this.connectFauxDOM('div.renderedD3', 'chart')
-    var data = this.props.data.map((a) => { return [a[0], a[4]] })
+    let data
+    if (this.props.data[0].length > 2) {
+      data = this.props.data.map((a) => { return [a[0], a[4]] })
+    } else {
+      data = this.props.data
+    }
 
     let m = {top: 20, right: 30, bottom: 20, left: 50}
     let w = document.getElementsByClassName('renderedD3')[0].parentElement.offsetWidth - 30
@@ -87,7 +91,7 @@ const StockChart = React.createClass({
     return (
       <div>
         <h2>Closing Prices:</h2>
-        <div className='renderedD3'>
+        <div className='renderedD3' key={this.props.key}>
           {this.state.chart}
         </div>
       </div>
