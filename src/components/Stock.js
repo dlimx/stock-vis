@@ -25,10 +25,9 @@ class Stock extends React.Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
-    axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${this.props.match.params.id}/data.json?api_key=PkKKxSJVBs2vP8_zkUb_&rows=261`)
+    axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
-        this.setState({data: res.data.dataset_data})
-        this.setState({chart: <StockChart {...res.data.dataset_data} key={this.state.range} />})
+        this.setState({data: res.data.dataset_data.data, chart: <StockChart data={res.data.dataset_data.data} key={this.state.range} />})
       })
       .catch((err) => {
         console.log(err)
@@ -36,10 +35,10 @@ class Stock extends React.Component {
       })
   }
 
-  update (days) {
-    axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${this.props.match.params.id}/data.json?api_key=PkKKxSJVBs2vP8_zkUb_&rows=${days}`)
+  update () {
+    axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
-        this.setState({chart: <StockChart {...res.data.dataset_data} key={this.state.range} />})
+        this.setState({chart: <StockChart data={res.data.dataset_data.data} key={this.state.range} />})
       })
       .catch((err) => {
         console.log(err)
@@ -61,38 +60,38 @@ class Stock extends React.Component {
     } else if (!data) {
       msg = 'Please wait, loading.'
     } else {
-      msg = <span>Latest data are from yesterday, <DisplayDate date={data.data[0][0]} />.</span>
-      if (data.data.length >= 261) {
-        avg = Math.round(data.data.reduce((a, b) => { return a + b[5] }, 0) / 261)
+      msg = <span>Latest data are from yesterday, <DisplayDate date={data[0][0]} />.</span>
+      if (data.length >= 261) {
+        avg = Math.round(data.reduce((a, b) => { return a + b[5] }, 0) / 261)
       } else {
         avg = 'Stock not old enough'
       }
 
-      diff = Math.round((data.data[0][4] - data.data[1][4]) / data.data[1][4] * 100000) / 100000
+      diff = Math.round((data[0][4] - data[1][4]) / data[1][4] * 100000) / 100000
       if (diff > 0) {
-        close = <h5>Close: {data.data[0][4]} <span style={{color: 'green', paddingLeft: '1rem'}}>{String.fromCharCode('9650')} {diff}%</span></h5>
+        close = <h5>Close: {data[0][4]} <span style={{color: 'green', paddingLeft: '1rem'}}>{String.fromCharCode('9650')} {diff}%</span></h5>
       } else {
-        close = <h5>Close: {data.data[0][4]} <span style={{color: 'red', paddingLeft: '1rem'}}>{String.fromCharCode('9660')} {diff}%</span></h5>
+        close = <h5>Close: {data[0][4]} <span style={{color: 'red', paddingLeft: '1rem'}}>{String.fromCharCode('9660')} {diff}%</span></h5>
       }
 
-      diff = Math.round((data.data[0][5] - data.data[1][5]) / data.data[1][5] * 100000) / 100000
+      diff = Math.round((data[0][5] - data[1][5]) / data[1][5] * 100000) / 100000
       if (diff > 0) {
-        volume = <h5>Volume: {data.data[0][5]} <span style={{color: 'green', paddingLeft: '1rem'}}>{String.fromCharCode('9650')} {diff}%</span></h5>
+        volume = <h5>Volume: {data[0][5]} <span style={{color: 'green', paddingLeft: '1rem'}}>{String.fromCharCode('9650')} {diff}%</span></h5>
       } else {
-        volume = <h5>Volume: {data.data[0][5]} <span style={{color: 'red', paddingLeft: '1rem'}}>{String.fromCharCode('9660')} {diff}%</span></h5>
+        volume = <h5>Volume: {data[0][5]} <span style={{color: 'red', paddingLeft: '1rem'}}>{String.fromCharCode('9660')} {diff}%</span></h5>
       }
 
       info = (
         <div className='row'>
           <div className='col-sm-6'>
             <h5>{close}</h5>
-            <h5>Open: {data.data[0][1]}</h5>
-            <h5>Prev. Close: {data.data[1][4]}</h5>
+            <h5>Open: {data[0][1]}</h5>
+            <h5>Prev. Close: {data[1][4]}</h5>
           </div>
           <div className='col-sm-6'>
             <h5>{volume}</h5>
             <h5>Average Volume (yr): {avg}</h5>
-            <h5>Range (dy): {Math.round((data.data[0][2] - data.data[0][3]) * 100) / 100}</h5>
+            <h5>Range (dy): {Math.round((data[0][2] - data[0][3]) * 100) / 100}</h5>
           </div>
         </div>
       )

@@ -31,7 +31,6 @@ class Home extends React.Component {
 
   search (e) {
     e.preventDefault()
-    console.log(this.context.router)
     if (this.state.searchMatch) {
       this.context.router.history.push(`/details/${this.state.searchTerm}`)
     } else {

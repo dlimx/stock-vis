@@ -1,7 +1,5 @@
+.env
 node_modules/
 .eslintcache
 *.map
-davidli-3.sublime-project
-davidli-3.sublime-workspace
 npm-debug.log
-blog/ms/*.json

@@ -29,17 +29,13 @@ class Nav extends React.Component {
 
   // component itself - CSS based responsive design
   render () {
-    let details
-    if (this.props.code) {
-      details = <NavLink to={`/details/${this.props.code}`} activeClassName='active'>Details</NavLink>
-    }
     return (
       <div>
         <nav className={this.state.class}>
           <div className='responsive-menu'>
             <NavLink exact to='/' activeClassName='active'>Home</NavLink>
             <NavLink to='/about' activeClassName='active'>About</NavLink>
-            {details}
+            <NavLink to={`/details/${this.props.code}`} activeClassName='active'>Details</NavLink>
             <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
           </div>
 

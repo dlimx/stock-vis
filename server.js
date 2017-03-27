@@ -11,13 +11,19 @@ const fs = require('fs')
 const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
 
+require('dotenv').config()
+require('./api/db');
+
 // entry point
 const AppClient = require('./src/Routes').default
+const apiRoutes = require('./api/apiRoutes')
 
 const server = express()
 
 server.use(compression())
 server.use('/public', express.static('./public', {maxage: 1210000000}))
+
+server.use('/api', apiRoutes)
 
 // server side rendering
 server.use((req, res) => {
