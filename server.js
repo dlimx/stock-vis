@@ -41,7 +41,7 @@ server.use((req, res) => {
 })
 
 // server port and setup
-const port = process.env.PORT || 5050
+const port = process.env.PORT || 8080
 
 console.log('Server hosted on port ' + port)
 server.listen(port)

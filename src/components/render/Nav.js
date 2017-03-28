@@ -35,12 +35,15 @@ class Nav extends React.Component {
           <div className='responsive-menu'>
             <NavLink exact to='/' activeClassName='active'>Home</NavLink>
             <NavLink to='/about' activeClassName='active'>About</NavLink>
-            <NavLink to={`/details/${this.props.code}`} activeClassName='active'>Details</NavLink>
+            { this.props.code ? <NavLink to={`/details/${this.props.code}`} activeClassName='active'>Details</NavLink> : ''}
+            <NavLink to='/compare' activeClassName='active'>Compare </NavLink>
             <a className='menu' onClick={this.click}><i className='icon-menu' /></a>
           </div>
-
+          <div className='search'>
+            <div />
+          </div>
         </nav>
-        <footer><a href='https://www.davidli.io/'><img className='icon' src='/favicon/favicon-32x32.png' />Made by David Li, 2017</a></footer>
+        <footer><a href='https://www.davidli.io/'><img className='icon' src='/favicon/favicon-32x32.png' />David Li, 2017</a></footer>
       </div>
     )
   }

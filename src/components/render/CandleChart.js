@@ -29,6 +29,7 @@ class CandleChart extends React.Component {
     let w = this.state.w || 1000
     let h = this.state.h || 500
     let m = {top: 40, right: 30, bottom: 20, left: 50}
+    let p = 1.005
 
     let svgNode = ReactFauxDOM.createElement('div')
     let svg = d3.select(svgNode).append('svg').attr('width', w).attr('height', h)
@@ -41,14 +42,15 @@ class CandleChart extends React.Component {
 
     let bisectDate = d3.bisector((d) => { return d[0] }).left
 
-    let band = w / data.length / 7 * 5
+    let band = w / (data.length + 1) / 7 * 5
+    band = band > 5 ? band : 5
 
     let xScale = d3.scaleTime()
       .domain(d3.extent(data, (d) => { return d[0] }))
-      .rangeRound([m.left, w - m.right])
+      .rangeRound([m.left + (band / 2), w - m.right - (band / 2)])
 
     let yScale = d3.scaleLinear()
-      .domain([d3.min(data, (d) => { return d[3] }), d3.max(data, (d) => { return d[2] })])
+      .domain([d3.min(data, (d) => { return d[3] }) / p, d3.max(data, (d) => { return d[2] }) * p])
       .range([h - m.top, m.bottom])
 
     let xAxis = d3.axisBottom(xScale).tickSize(3).ticks(6).tickSizeOuter(0)
@@ -63,27 +65,43 @@ class CandleChart extends React.Component {
 
     svg.append('g')
       .call(yAxisL)
-      .attr('transform', `translate(${m.left - band / 2},${0})`)
+      .attr('transform', `translate(${m.left},${0})`)
       .select('.domain')
       .remove()
 
     svg.append('g')
       .call(yAxisR)
-      .attr('transform', `translate(${w - m.right + band / 2},${0})`)
+      .attr('transform', `translate(${w - m.right},${0})`)
       .select('.domain')
       .remove()
 
     svg.append('text')
         .attrs({
           transform: 'rotate(-90)',
-          y: '1.8rem',
+          y: '1.6rem',
           x: -30,
           'text-anchor': 'end'
         })
         .text('Price (USD)')
 
+    let draw2 = svg.append('svg').attr('width', w - m.left - m.right).attr('height', h - m.top - m.bottom)
+      .attr('transform', `translate(${m.left},${m.top})`)
     let draw = svg.append('svg').attr('width', w - m.left - m.right).attr('height', h - m.top - m.bottom)
       .attr('transform', `translate(${m.left},${m.top})`)
+
+    draw2.selectAll('rect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attrs({
+          height: (d) => { return (yScale(d[3]) - yScale(d[2])) },
+          width: 1,
+          x: (d) => {
+            return (xScale(d[0]))
+          },
+          y: (d) => { return yScale(d[2]) },
+          fill: '#606c76'
+        })
 
     draw.selectAll('rect')
         .data(data)
@@ -110,16 +128,14 @@ class CandleChart extends React.Component {
           },
           fill: (d) => {
             if (d[4] > d[1]) {
-              return ('green')
+              return ('black')
             } else {
               return ('red')
             }
           }
         })
 
-    draw.selectAll('path')
-
-    var focus = svg.append('g')
+    let focus = svg.append('g')
       .attrs({
         opacity: this.state.mouseActive ? 0.87 : 0
       })
