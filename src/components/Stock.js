@@ -14,7 +14,6 @@ class Stock extends React.Component {
     super(props)
     this.state = {
       data: '',
-      info: '',
       err: '',
       range: 261
     }
@@ -26,8 +25,10 @@ class Stock extends React.Component {
   componentDidMount () {
     axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
+        let chartData = res.data.map((a, i) => { return [i, a[0], a[4]] })
+        this.props.dispatch(setData(chartData))
         this.setState({data: res.data})
-        this.props.dispatch(setData(res.data))
+        this.setState({chart: <StockChart />})
       })
       .catch((err) => {
         console.log(err)
@@ -38,7 +39,8 @@ class Stock extends React.Component {
   update () {
     axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
-        this.props.dispatch(setData(res.data))
+        let chartData = res.data.map((a, i) => { return [i, a[0], a[4]] })
+        this.props.dispatch(setData(chartData))
       })
       .catch((err) => {
         console.log(err)
@@ -140,7 +142,8 @@ class Stock extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <div>
-              <StockChart />
+              <h2>Closing Prices:</h2>
+              {this.state.chart}
             </div>
             <div className='row'>
               {buttons}

@@ -2,7 +2,7 @@ import { SET_CODE, SET_DATA } from './actions'
 
 const DEFAULT_STATE = {
   searchTerm: '',
-  data: []
+  data: [[]]
 }
 
 const setCode = (state, action) => {
