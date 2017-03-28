@@ -21,7 +21,6 @@ class StockChart extends React.Component {
   }
 
   render () {
-    console.log(this.props.data)
     let data = this.props.data
     let parseTime = d3.timeParse('%Y-%m-%d')
     let w = this.state.w || 1000
@@ -32,14 +31,14 @@ class StockChart extends React.Component {
     let svg = d3.select(svgNode).append('svg').attr('width', w).attr('height', h)
 
     data.forEach((d) => {
-      d[1] = parseTime(d[1])
+      d[0] = parseTime(d[0])
     })
 
     let xScale = d3.scaleTime()
-      .domain(d3.extent(data, (d) => { return d[1] }))
+      .domain(d3.extent(data, (d) => { return d[0] }))
       .rangeRound([m.left, w - m.right])
     let yScale = d3.scaleLinear()
-      .domain([0, d3.max(data, (d) => { return d[2] })])
+      .domain([0, d3.max(data, (d) => { return d[1] })])
       .range([h - m.top, m.bottom])
 
     let xAxis = d3.axisBottom(xScale).tickSize(3).ticks(6).tickSizeOuter(0)
@@ -72,22 +71,24 @@ class StockChart extends React.Component {
       .select('.domain')
       .remove()
 
-    let line = d3.line()
+    if (data.length > 2) {
+      let line = d3.line()
                   .x((d, i) => {
-                    return xScale(d[1])
+                    return xScale(d[0])
                   })
                   .y((d) => {
-                    return yScale(d[2])
+                    return yScale(d[1])
                   })
 
-    svg.append('path')
-       .datum(data)
-       .attr('d', line)
-       .attr('stroke', '#9b4dca')
-       .attr('stroke-width', 2)
-       .attr('stroke-linejoin', 'round')
-       .attr('stroke-linecap', 'round')
-       .attr('fill', 'none')
+      svg.append('path')
+        .datum(data)
+        .attr('d', line)
+        .attr('stroke', '#9b4dca')
+        .attr('stroke-width', 2)
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
+        .attr('fill', 'none')
+    }
 
     return (
       <div className='svgContainer'>
