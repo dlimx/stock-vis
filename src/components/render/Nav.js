@@ -40,7 +40,7 @@ class Nav extends React.Component {
           </div>
 
         </nav>
-        <footer><a href='https://www.davidli.io/'><img className='icon' src='favicon/favicon-32x32.png' />Made by David Li, 2017</a></footer>
+        <footer><a href='https://www.davidli.io/'><img className='icon' src='/favicon/favicon-32x32.png' />Made by David Li, 2017</a></footer>
       </div>
     )
   }

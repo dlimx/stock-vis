@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import { setCode, setData } from '../redux/actionCreators'
 
-import StockChart from './render/StockChart'
+import LineChart from './render/LineChart'
 import DisplayDate from './render/DisplayDate'
 
 // component to render stock info
@@ -26,7 +26,7 @@ class Stock extends React.Component {
   componentDidMount () {
     axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
-        this.setState({chart: <StockChart />})
+        this.setState({chart: <LineChart />})
         this.setState({info: res.data})
       })
       .catch((err) => {
