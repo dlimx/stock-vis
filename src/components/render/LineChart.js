@@ -28,12 +28,12 @@ class LineChart extends React.Component {
   render () {
     let w = this.state.w || 1000
     let h = this.state.h || 500
-    let m = {top: 40, right: 50, bottom: 20, left: 70}
+    let m = {top: 40, right: 30, bottom: 20, left: 50}
 
     let svgNode = ReactFauxDOM.createElement('div')
     let svg = d3.select(svgNode).append('svg').attr('width', w).attr('height', h)
 
-    let data = this.props.data
+    let data = this.props.compareData
 
     data.forEach((d) => {
       d[0] = new Date(d[0])
@@ -73,34 +73,32 @@ class LineChart extends React.Component {
     svg.append('text')
         .attrs({
           transform: 'rotate(-90)',
-          y: '3.2rem',
+          y: '1.8rem',
           x: -30,
           'text-anchor': 'end'
         })
         .text('Price (USD)')
 
-    if (data.length > 2) {
-      let line = d3.line()
-                  .x((d, i) => {
-                    return xScale(d[0])
-                  })
-                  .y((d) => {
-                    return yScale(d[1])
-                  })
+    let line = d3.line()
+                .x((d, i) => {
+                  return xScale(d[0])
+                })
+                .y((d) => {
+                  return yScale(d[1])
+                })
 
-      svg.append('path')
-        .datum(data)
-        .attrs({
-          d: line,
-          stroke: '#9b4dca',
-          'stroke-width': this.state.mouseActive ? 3 : 2,
-          'stroke-linejoin': 'round',
-          'stroke-linecap': 'round',
-          'fill': 'none',
-          transform: `translate(${0},${m.top / 2})`
-        })
-    }
-
+    svg.append('path')
+      .datum(data)
+      .attrs({
+        d: line,
+        stroke: '#9b4dca',
+        'stroke-width': this.state.mouseActive ? 3 : 2,
+        'stroke-linejoin': 'round',
+        'stroke-linecap': 'round',
+        'fill': 'none',
+        transform: `translate(${0},${m.top / 2})`
+      })
+    
     var focus = svg.append('g')
       .attrs({
         opacity: this.state.mouseActive ? 0.87 : 0
@@ -164,12 +162,12 @@ class LineChart extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.data
+    compareData: state.compareData
   }
 }
 
 LineChart.propTypes = {
-  data: React.PropTypes.array.isRequired
+  compareData: React.PropTypes.array.isRequired
 }
 
 export default connect(mapStateToProps)(LineChart)

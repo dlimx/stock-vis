@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import { setCode, setData } from '../redux/actionCreators'
 
-import LineChart from './render/LineChart'
+import CandleChart from './render/CandleChart'
 import DisplayDate from './render/DisplayDate'
 
 // component to render stock info
@@ -26,19 +26,18 @@ class Stock extends React.Component {
   componentDidMount () {
     axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
-        this.setState({chart: <LineChart />})
+        this.setState({chart: <CandleChart />})
         this.setState({info: res.data})
+        this.props.dispatch(setData(res.data))
       })
       .catch((err) => {
         console.log(err)
         this.setState({err: <span>The code {this.props.match.params.id.toUpperCase()} does not exist. <Link to='/'>Please try a new code.</Link></span>})
-      }).then((res) => {
-        this.update()
       })
   }
 
   update () {
-    axios.get(`/api/compare/${this.props.match.params.id}/${this.state.range}`)
+    axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
         this.props.dispatch(setData(res.data))
       })
@@ -142,7 +141,6 @@ class Stock extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <div>
-              <h2>Closing Prices:</h2>
               {this.state.chart}
             </div>
             <div className='row'>

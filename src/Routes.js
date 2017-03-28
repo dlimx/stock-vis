@@ -7,8 +7,8 @@ import store from './redux/store'
 import Home from './components/Home'
 import About from './components/About'
 import Stock from './components/Stock'
+import Compare from './components/Compare'
 
-import Compare from './components/render/Compare'
 import NotFound from './components/render/NotFound'
 import Nav from './components/render/Nav'
 
