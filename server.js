@@ -7,6 +7,8 @@ const ReactDOMServer = require('react-dom/server')
 const ReactRouter = require('react-router-dom')
 const StaticRouter = ReactRouter.StaticRouter
 const _ = require('lodash')
+const favicon = require('serve-favicon')
+const path = require('path')
 const fs = require('fs')
 const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
@@ -21,7 +23,8 @@ const apiRoutes = require('./api/apiRoutes')
 const server = express()
 
 server.use(compression())
-server.use('/public', express.static('./public', {maxage: 1210000000}))
+server.use(favicon(path.join(__dirname, 'public', 'favicon', 'favicon.ico')))
+server.use('/', express.static(path.join(__dirname, 'public'), {maxage: 1210000000}))
 
 server.use('/api', apiRoutes)
 

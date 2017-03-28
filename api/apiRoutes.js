@@ -18,7 +18,7 @@ function getData(req, res){
   axios.get(`https://www.quandl.com/api/v3/datasets/WIKI/${req.params.codeid}/data.json?api_key=${process.env.API_KEY}&rows=${req.params.range}`)
       .then((data) => {
         res.status(200)
-        res.send(data.data)
+        res.send(data.data.dataset_data.data)
       })
       .catch((err) => {
         res.status(404)

@@ -1,26 +1,25 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Faux from 'react-faux-dom'
 
 const d3 = Object.assign({}, require('d3-scale'), require('d3-selection'), require('d3-time-format'), require('d3-axis'), require('d3-path'), require('d3-shape'), require('d3-array'))
 
 const StockChart = React.createClass({
   propTypes: {
-    data: React.PropTypes.array.isRequired,
-    key: React.PropTypes.number.isRequired
+    data: React.PropTypes.array.isRequired
   },
 
   mixins: [
     Faux.mixins.core
   ],
 
+  getInitialState () {
+    return { chart: '' }
+  },
+
   componentDidMount () {
     const faux = this.connectFauxDOM('div.renderedD3', 'chart')
-    let data
-    if (this.props.data[0].length > 2) {
-      data = this.props.data.map((a) => { return [a[0], a[4]] })
-    } else {
-      data = this.props.data
-    }
+    let data = this.props.data
 
     let m = {top: 20, right: 30, bottom: 20, left: 50}
     let w = document.getElementsByClassName('renderedD3')[0].parentElement.offsetWidth - 30
@@ -91,7 +90,7 @@ const StockChart = React.createClass({
     return (
       <div>
         <h2>Closing Prices:</h2>
-        <div className='renderedD3' key={this.props.key}>
+        <div className='renderedD3'>
           {this.state.chart}
         </div>
       </div>
@@ -99,4 +98,10 @@ const StockChart = React.createClass({
   }
 })
 
-export default StockChart
+const mapStateToProps = (state) => {
+  return {
+    data: state.data
+  }
+}
+
+export default connect(mapStateToProps)(StockChart)

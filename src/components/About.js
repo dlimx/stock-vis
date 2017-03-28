@@ -14,7 +14,7 @@ class About extends React.Component {
             <h2>About</h2>
             <p>We have daily stock data, sourced from <a href='https://www.quandl.com'>Quandl.</a></p>
             <p>An example is shown below: </p>
-            <img src='/public/sample.jpg' />
+            <img src='/sample.jpg' />
             <p>Technically, the server has a node.js backend, and a React front end.</p>
           </div>
         </div>
