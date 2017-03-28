@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { setCode, setData } from '../redux/actionCreators'
 
 import CandleChart from './render/CandleChart'
+import LineChart from './render/LineChart'
 import DisplayDate from './render/DisplayDate'
 
 // component to render stock info
@@ -20,7 +21,8 @@ class Stock extends React.Component {
     }
     this.props.dispatch(setCode(this.props.match.params.id.toUpperCase()))
     this.update = this.update.bind(this)
-    this.handleClick = this.handleClick.bind(this)
+    this.handleRange = this.handleRange.bind(this)
+    this.handleChart = this.handleChart.bind(this)
   }
 
   componentDidMount () {
@@ -47,14 +49,22 @@ class Stock extends React.Component {
       })
   }
 
-  handleClick (e) {
+  handleRange (e) {
     const id = parseInt(e.target.id.slice(1))
     this.setState({range: id})
     this.update(id)
   }
 
+  handleChart (e) {
+    if (this.state.chart === <CandleChart />) {
+      this.setState({chart: <LineChart />})
+    } else {
+      this.setState({chart: <CandleChart />})
+    }
+  }
+
   render () {
-    let msg, title, infoBox, buttons
+    let msg, title, infoBox, buttons, chartButtons
     if (!this.props.match.params.id || this.props.match.params.id.toLowerCase() === 'undefined') {
       title = 'Search Error'
       msg = <Link to='/'>Please return and search for a code!</Link>
@@ -75,14 +85,14 @@ class Stock extends React.Component {
           avg = 'Stock not old enough'
         }
 
-        diff = Math.round((info[0][4] - info[1][4]) / info[1][4] * 100000) / 100000
+        diff = Math.round((info[0][4] - info[1][4]) / info[1][4] * 100000) / 1000
         if (diff > 0) {
           close = <h5>Close: {info[0][4]} <span style={{color: 'green', paddingLeft: '1rem'}}>{String.fromCharCode('9650')} {diff}%</span></h5>
         } else {
           close = <h5>Close: {info[0][4]} <span style={{color: 'red', paddingLeft: '1rem'}}>{String.fromCharCode('9660')} {diff}%</span></h5>
         }
 
-        diff = Math.round((info[0][5] - info[1][5]) / info[1][5] * 100000) / 100000
+        diff = Math.round((info[0][5] - info[1][5]) / info[1][5] * 100000) / 1000
         if (diff > 0) {
           volume = <h5>Volume: {info[0][5]} <span style={{color: 'green', paddingLeft: '1rem'}}>{String.fromCharCode('9650')} {diff}%</span></h5>
         } else {
@@ -90,7 +100,7 @@ class Stock extends React.Component {
         }
 
         infoBox = (
-          <div className='row'>
+          <div className='buttons clearfix'>
             <div className='col-sm-6'>
               <h5>{close}</h5>
               <h5>Open: {info[0][1]}</h5>
@@ -107,22 +117,33 @@ class Stock extends React.Component {
         buttons = (
           <div className='buttons' id='nSelect'>
             <div className='col-sm-2 col-xs-4'>
-              <button className={'button ' + (this.state.range === 5 ? '' : 'button-outline')} onClick={this.handleClick} id='n5'>1 Week</button>
+              <button className={'button ' + (this.state.range === 5 ? '' : 'button-outline')} onClick={this.handleRange} id='n5'>1 Week</button>
             </div>
             <div className='col-sm-2 col-xs-4'>
-              <button className={'button ' + (this.state.range === 22 ? '' : 'button-outline')} onClick={this.handleClick} id='n22'>1 Month</button>
+              <button className={'button ' + (this.state.range === 22 ? '' : 'button-outline')} onClick={this.handleRange} id='n22'>1 Month</button>
             </div>
             <div className='col-sm-2 col-xs-4'>
-              <button className={'button ' + (this.state.range === 133 ? '' : 'button-outline')} onClick={this.handleClick} id='n133'>6 Months</button>
+              <button className={'button ' + (this.state.range === 133 ? '' : 'button-outline')} onClick={this.handleRange} id='n133'>6 Months</button>
             </div>
             <div className='col-sm-2 col-xs-4'>
-              <button className={'button ' + (this.state.range === 261 ? '' : 'button-outline')} onClick={this.handleClick} id='n261'>1 Year</button>
+              <button className={'button ' + (this.state.range === 261 ? '' : 'button-outline')} onClick={this.handleRange} id='n261'>1 Year</button>
             </div>
             <div className='col-sm-2 col-xs-4'>
-              <button className={'button ' + (this.state.range === 783 ? '' : 'button-outline')} onClick={this.handleClick} id='n783'>3 Years</button>
+              <button className={'button ' + (this.state.range === 783 ? '' : 'button-outline')} onClick={this.handleRange} id='n783'>3 Years</button>
             </div>
             <div className='col-sm-2 col-xs-4'>
-              <button className={'button ' + (this.state.range === 9999 ? '' : 'button-outline')} onClick={this.handleClick} id='n9999'>Maximum</button>
+              <button className={'button ' + (this.state.range === 9999 ? '' : 'button-outline')} onClick={this.handleRange} id='n9999'>Maximum</button>
+            </div>
+          </div>
+        )
+
+        chartButtons = (
+          <div className='chartButtons col-sm-4 col-sm-offset-4 col-xs-8 col-xs-offset-2'>
+            <div className='col-sm-2 col-xs-4'>
+              <button className={'button ' + (this.state.chart === <LineChart /> ? '' : 'button-outline')} onClick={this.handleChart}>Linear</button>
+            </div>
+            <div className='col-sm-2 col-xs-4'>
+              <button className={'button ' + (this.state.chart === <CandleChart /> ? '' : 'button-outline')} onClick={this.handleChart}>Candlestick</button>
             </div>
           </div>
         )
@@ -138,8 +159,11 @@ class Stock extends React.Component {
           </div>
         </div>
         {infoBox}
-        <div className='row'>
+        <div className='row clearfix'>
           <div className='col-xs-12'>
+            <div className='row'>
+              {chartButtons}
+            </div>
             <div>
               {this.state.chart}
             </div>

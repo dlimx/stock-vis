@@ -33,7 +33,7 @@ class LineChart extends React.Component {
     let svgNode = ReactFauxDOM.createElement('div')
     let svg = d3.select(svgNode).append('svg').attr('width', w).attr('height', h)
 
-    let data = this.props.compareData
+    let data = this.props.data
 
     data.forEach((d) => {
       d[0] = new Date(d[0])
@@ -98,7 +98,7 @@ class LineChart extends React.Component {
         'fill': 'none',
         transform: `translate(${0},${m.top / 2})`
       })
-    
+
     var focus = svg.append('g')
       .attrs({
         opacity: this.state.mouseActive ? 0.87 : 0
@@ -162,12 +162,12 @@ class LineChart extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    compareData: state.compareData
+    data: state.data
   }
 }
 
 LineChart.propTypes = {
-  compareData: React.PropTypes.array.isRequired
+  data: React.PropTypes.array.isRequired
 }
 
 export default connect(mapStateToProps)(LineChart)
