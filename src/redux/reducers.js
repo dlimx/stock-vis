@@ -4,7 +4,7 @@ const DEFAULT_STATE = {
   code: '',
   data: [],
   comId: [],
-  comData: []
+  comData: {}
 }
 
 const setCode = (state, action) => {

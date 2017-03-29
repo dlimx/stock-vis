@@ -22,12 +22,14 @@ class Compare extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.data
+    comId: state.comId,
+    comDat: state.comData
   }
 }
 
 Compare.propTypes = {
-  data: React.PropTypes.array
+  comId: React.PropTypes.array,
+  comData: React.PropTypes.object
 }
 
 export default connect(mapStateToProps)(Compare)

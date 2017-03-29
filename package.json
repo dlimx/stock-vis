@@ -49,6 +49,7 @@
     "mongoose": "^4.9.2",
     "preact": "^7.2.0",
     "preact-compat": "~3.13.1",
+    "randomcolor": "^0.4.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-faux-dom": "^3.0.1",
