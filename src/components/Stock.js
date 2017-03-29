@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { setCode, setData } from '../redux/actionCreators'
+import { setCode, setData, addCompare } from '../redux/actionCreators'
 
 import CandleChart from './render/CandleChart'
 import DisplayDate from './render/DisplayDate'
@@ -21,6 +21,7 @@ class Stock extends React.Component {
     this.props.dispatch(setCode(this.props.match.params.id.toUpperCase()))
     this.update = this.update.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.addCompare = this.addCompare.bind(this)
   }
 
   componentDidMount () {
@@ -45,6 +46,12 @@ class Stock extends React.Component {
         console.log(err)
         this.setState({err: <span>The code {this.props.match.params.id.toUpperCase()} does not exist. <Link to='/'>Please try a new code.</Link></span>})
       })
+  }
+
+  addCompare () {
+    this.props.dispatch(addCompare(this.props.match.params.id.toUpperCase(), this.props.data.map((a) => {
+      return [a[0], a[4]]
+    })))
   }
 
   handleClick (e) {
@@ -95,11 +102,14 @@ class Stock extends React.Component {
               <h5>{close}</h5>
               <h5>Open: {info[0][1]}</h5>
               <h5>Prev. Close: {info[1][4]}</h5>
+              <h5>Range (dy): {Math.round((info[0][2] - info[0][3]) * 100) / 100}</h5>
             </div>
             <div className='col-sm-6'>
               <h5>{volume}</h5>
               <h5>Average Volume (yr): {avg}</h5>
-              <h5>Range (dy): {Math.round((info[0][2] - info[0][3]) * 100) / 100}</h5>
+              <div className='centered'>
+                <button className='button ' onClick={this.addCompare} id='n5'>+ Compare</button>
+              </div>
             </div>
           </div>
         )
@@ -155,13 +165,13 @@ class Stock extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    code: state.code,
     data: state.data
   }
 }
 
 Stock.propTypes = {
   match: React.PropTypes.object.isRequired,
+  data: React.PropTypes.array,
   dispatch: React.PropTypes.func
 }
 

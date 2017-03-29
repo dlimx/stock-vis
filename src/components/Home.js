@@ -63,7 +63,7 @@ class Home extends React.Component {
     } else if (this.state.searchResults.length < 25) {
       if (this.state.searchMatch) {
         display = <div>
-          <LinkCard {...this.state.searchMatch} />
+          <LinkCard {...this.state.searchMatch} compare key={this.state.searchTerm} />
           <hr />
           {this.state.searchResults
             .filter((a) => {
@@ -80,7 +80,7 @@ class Home extends React.Component {
       }
     } else if (this.state.searchMatch) {
       display = <div>
-        <LinkCard {...this.state.searchMatch} />
+        <LinkCard {...this.state.searchMatch} compare key={this.state.searchTerm} />
         <hr />
         <p>There are too many other search results!</p>
       </div>

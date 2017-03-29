@@ -79,3 +79,19 @@ footer{
   top: 13px;
   left: 13px;
 }
+
+.compare{
+  position: fixed;
+  top: 65px;
+  right: 15px;
+  height: 35px;
+  padding: 4px 10px 0 10px;
+  border-radius: 17.5px;
+  background-color: #606c76;
+  color: white;
+  text-align: right;
+}
+
+.compare > a {
+  color: #d2ade7;
+}
