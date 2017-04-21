@@ -117,7 +117,7 @@ class CandleChart extends React.Component {
           },
           width: band,
           x: (d) => {
-            return (xScale(d[0]) - band / 2)
+            return (xScale(d[0]) - (band / 2))
           },
           y: (d) => {
             if (d[4] > d[1]) {
@@ -130,7 +130,7 @@ class CandleChart extends React.Component {
             if (d[4] > d[1]) {
               return ('black')
             } else {
-              return ('red')
+              return ('#F44336')
             }
           }
         })

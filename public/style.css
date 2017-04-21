@@ -95,3 +95,23 @@ footer{
 .compare > a {
   color: #d2ade7;
 }
+
+.load{
+  border: 16px solid #FFFFFF;
+  border-top: 16px solid #9b4dca;
+  border-bottom: 16px solid #9b4dca;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 20%;
+  right: -100%;
+  left: -100%;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}

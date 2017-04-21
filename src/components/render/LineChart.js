@@ -112,7 +112,7 @@ class LineChart extends React.Component {
 
         ref.append('rect')
           .attrs({
-            x: i * 50 + 20,
+            x: (i * 50) + 20,
             y: 10,
             width: 30,
             height: 30,
@@ -122,7 +122,7 @@ class LineChart extends React.Component {
         ref.append('text')
           .attrs({
             y: 60,
-            x: (i * 50 + 35),
+            x: ((i * 50) + 35),
             'text-anchor': 'middle'
           }).text(a)
       })

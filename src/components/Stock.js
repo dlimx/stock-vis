@@ -15,8 +15,10 @@ class Stock extends React.Component {
     this.state = {
       info: '',
       err: '',
+      chartMsg: '',
       range: 261,
-      chart: ''
+      chart: '',
+      load: ''
     }
     this.props.dispatch(setCode(this.props.match.params.id.toUpperCase()))
     this.update = this.update.bind(this)
@@ -27,8 +29,13 @@ class Stock extends React.Component {
   componentDidMount () {
     axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
-        this.setState({chart: <CandleChart />})
-        this.setState({info: res.data})
+        this.setState({chart: <CandleChart />, info: res.data})
+        let days = res.data.length
+        if (days < this.state.range) {
+          this.setState({chartMsg: <p style={{backgroundColor: '#D32F2F', color: '#FFFFFF'}}>Warning - the stock data is only ${days} old - insufficient to chart the whole time period.</p>})
+        } else {
+          this.setState({chartMsg: ''})
+        }
         this.props.dispatch(setData(res.data))
       })
       .catch((err) => {
@@ -40,6 +47,7 @@ class Stock extends React.Component {
   update () {
     axios.get(`/api/code/${this.props.match.params.id}/${this.state.range}`)
       .then((res) => {
+        this.setState({load: ''})
         this.props.dispatch(setData(res.data))
       })
       .catch((err) => {
@@ -56,7 +64,10 @@ class Stock extends React.Component {
 
   handleClick (e) {
     const id = parseInt(e.target.id.slice(1))
-    this.setState({range: id})
+    this.setState({
+      range: id,
+      load: <div className='load' />
+    })
     this.update(id)
   }
 
@@ -151,6 +162,8 @@ class Stock extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <div>
+              {this.state.chartMsg}
+              {this.state.load}
               {this.state.chart}
             </div>
             <div className='row'>

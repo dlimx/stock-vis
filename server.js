@@ -14,7 +14,6 @@ const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
 
 require('dotenv').config()
-require('./api/db');
 
 // entry point
 const AppClient = require('./src/Routes').default
